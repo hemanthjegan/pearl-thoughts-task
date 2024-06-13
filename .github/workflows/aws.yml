@@ -37,7 +37,7 @@ env:
   ECS_TASK_DEFINITION: .aws/task-definition.json # Path to the ECS task definition JSON file
   CONTAINER_NAME: tf-container             # Set to the name of the container in the task definition
   ECS_TASK_DEFINITION_FAMILY_NAME: tf-td
-  EXECUTION_ROLE_ARN: ${{ env.EXECUTION_ROLE_ARN }}
+  EXECUTION_ROLE_ARN: arn:aws:iam::992382373285:role/ecsTaskExecutionRole
 
 permissions:
   contents: read
