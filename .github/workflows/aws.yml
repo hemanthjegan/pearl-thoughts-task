@@ -53,14 +53,14 @@ jobs:
     - name: Echo "Initializing Terraform"
       run: |
         echo "Initializing Terraform backend"
-        terraform init
+        ./ terraform init
         echo "Initializing Terraform"
-        terraform init
+        ./ terraform init
 
     - name: Fetch Terraform Output
       id: fetch-tf-output
       run: |
-        RESOURCE_IDS=$(./terraform output -json resource_ids)
+        RESOURCE_IDS=$(./ terraform output -json resource_ids)
         echo "::set-output name=resource_ids::$RESOURCE_IDS"
 
     - name: Apply Terraform if resources do not exist
@@ -69,13 +69,13 @@ jobs:
         RESOURCE_IDS=$(echo "${{ steps.fetch-tf-output.outputs.resource_ids }}")
         for resource_type in $(echo $RESOURCE_IDS | jq -r 'keys[]'); do
           resource_id=$(echo $RESOURCE_IDS | jq -r ".[$resource_type]")
-          if terraform state list | grep -q "$resource_id"; then
+          if ./ terraform state list | grep -q "$resource_id"; then
             echo "$resource_type already exists. Skipping Terraform commands."
           else
             echo "Generating Terraform plan"
-            terraform plan -out=tfplan
+            ./ terraform plan -out=tfplan
             echo "Applying Terraform plan"
-            terraform apply -auto-approve tfplan
+            ./ terraform apply -auto-approve tfplan
             break  # Exit loop after applying Terraform for the first resource type
           fi
         done
