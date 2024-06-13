@@ -20,12 +20,12 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.vpc.id
 
   tags = {
-    Name = "vpc-igw"
+    Name = var.igw_name
   }
 }
 
 resource "aws_route_table" "rt" {
-  vpc_id = aws_vpc.tf-vpc.id
+  vpc_id = aws_vpc.vpc.id
 
   route {
     cidr_block = "0.0.0.0/0"
@@ -33,7 +33,7 @@ resource "aws_route_table" "rt" {
   }
 
   tags = {
-    Name = "vpc-rt"
+    Name = var.rt_name
   }
 }
 
