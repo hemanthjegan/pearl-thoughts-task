@@ -77,7 +77,7 @@ jobs:
     - name: Replace placeholders in task definition
       run: |
         cat ${{ env.ECS_TASK_DEFINITION }} | \
-        sed 's|\${{ FAMILY }}|${{ env.FAMILY }}|g' | \
+        sed 's|\${{ FAMILY }}|${{ env.ECS_TASK_DEFINITION_FAMILY_NAME }}|g' | \
         sed 's|\${{ CONTAINER_NAME }}|${{ env.CONTAINER_NAME }}|g' | \
         sed 's|\${{ IMAGE_URI }}|${{ steps.build-image.outputs.image }}|g' | \
         sed 's|\${{ EXECUTION_ROLE_ARN }}|${{ env.EXECUTION_ROLE_ARN }}|g' \
