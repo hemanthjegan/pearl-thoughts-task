@@ -1,0 +1,34 @@
+**/.terraform/*
+.terraform/
+.terraform.lock.hcl
+
+# Terraform variable files
+# *.tfvars
+*.tfvars.json
+
+# Ignore override files as they are usually used to override resources locally.
+# They are not meant to be kept in version control.
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Terraform plan files
+*.tfplan
+
+# Terraform state files
+terraform.tfstate
+terraform.tfstate.backup
+terraform.tfstate.*
+
+# Crash log files
+crash.log
+
+# Exclude the .terraform directory for macOS users
+.DS_Store
+
+# Exclude system files for Windows users
+Thumbs.db
+
+# Ignore secrets file
+secret.auto.tfvars

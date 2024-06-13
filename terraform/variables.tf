@@ -29,11 +29,3 @@ variable "ecs_service_name" {
 variable "ecs_execution_role_arn" {
   
 }
-
-variable "subnet_id" {
-  
-}
-
-variable "security_group_id" {
-  
-}

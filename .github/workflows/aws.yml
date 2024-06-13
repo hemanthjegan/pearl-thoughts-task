@@ -46,20 +46,39 @@ jobs:
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_ENV
 
-    - name: Initialize Terraform
-      run: terraform init
-      working-directory: ./terraform
+    - name: Echo "Running Terraform"
+      run: |
+        echo "Running Terraform"
+        
+    - name: Echo "Initializing Terraform"
+      run: |
+        - echo "Initializing Terraform backend"
+        ./terraform init
+        echo "Initializing Terraform"
+        ./terraform init
 
-    - name: Terraform Plan
-      id: tf-plan
-      run: terraform plan -input=false -out=tfplan.out
-      working-directory: ./terraform
+    - name: Fetch Terraform Output
+      id: fetch-tf-output
+      run: |
+        RESOURCE_IDS=$(./terraform output -json resource_ids)
+        echo "::set-output name=resource_ids::$RESOURCE_IDS"
 
-    - name: Terraform Apply
-      id: tf-apply
-      if: success() 
-      run: terraform apply -input=false tfplan.out
-      working-directory: ./terraform
+    - name: Apply Terraform if resources do not exist
+      id: apply-tf
+      run: |
+        RESOURCE_IDS=$(echo "${{ steps.fetch-tf-output.outputs.resource_ids }}")
+        for resource_type in $(echo $RESOURCE_IDS | jq -r 'keys[]'); do
+          resource_id=$(echo $RESOURCE_IDS | jq -r ".[$resource_type]")
+          if ./terraform state list | grep -q "$resource_id"; then
+            echo "$resource_type already exists. Skipping Terraform commands."
+          else
+            echo "Generating Terraform plan"
+            ./terraform plan -out=tfplan
+            echo "Applying Terraform plan"
+            ./terraform apply -auto-approve tfplan
+            break  # Exit loop after applying Terraform for the first resource type
+          fi
+        done
 
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: task-def
