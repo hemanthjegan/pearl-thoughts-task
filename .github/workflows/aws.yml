@@ -91,13 +91,13 @@ jobs:
           "cpu": "256",
           "memory": "512"
         }
-        ' > task-def
+        ' > task-definition
 
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: task-def
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
-        task-definition: task-def
+        task-definition: task-definition
         container-name: ${{ env.CONTAINER_NAME }}
         image: ${{ steps.build-image.outputs.image }}
 
