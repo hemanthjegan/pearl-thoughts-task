@@ -10,8 +10,7 @@ env:
   ECS_CLUSTER: tf-cluster                  # Set to your ECS cluster name
   CONTAINER_NAME: tf-container             # Set to the name of the container in the task definition
   ECS_TASK_DEFINITION_FAMILY_NAME: tf-td
-  EXECUTION_ROLE_ARN: arn:aws:iam::992382373285:role/ecsTaskExecutionRole
-  ECR_REPOSITORY: my-ecr-repo              # Set to your ECR repository name
+  EXECUTION_ROLE_ARN: ${{ env.EXECUTION_ROLE_ARN }}
 
 permissions:
   contents: read
