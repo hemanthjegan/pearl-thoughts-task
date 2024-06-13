@@ -13,6 +13,8 @@ resource "aws_ecs_task_definition" "task" {
     {
       name      = var.container_name,
       image     = var.image_uri,
+      cpu       = 256,
+      memory    = 512,
       essential = true,
       portMappings = [
         {
@@ -32,8 +34,12 @@ resource "aws_ecs_service" "service" {
   task_definition = aws_ecs_task_definition.task.arn
   desired_count   = 1
   launch_type     = "FARGATE"
+  enable_execute_command = true
+  deployment_maximum_percent = 200
+  deployment_minimum_healthy_percent = 100
 
   network_configuration {
+    assign_public_ip = true
     subnets         = [var.subnet_id]
     security_groups = [var.security_group_id]
   }
