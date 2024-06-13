@@ -40,7 +40,7 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: test-images
-        IMAGE_TAG: v.01
+        IMAGE_TAG: latest
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f Dockerfile ./
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
