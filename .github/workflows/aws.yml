@@ -52,7 +52,7 @@ jobs:
         
     - name: Echo "Initializing Terraform"
       run: |
-        - echo "Initializing Terraform backend"
+        echo "Initializing Terraform backend"
         ./terraform init
         echo "Initializing Terraform"
         ./terraform init
