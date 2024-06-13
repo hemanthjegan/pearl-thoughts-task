@@ -16,6 +16,32 @@ resource "aws_subnet" "sub" {
   }
 }
 
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.vpc.id
+
+  tags = {
+    Name = "vpc-igw"
+  }
+}
+
+resource "aws_route_table" "rt" {
+  vpc_id = aws_vpc.tf-vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw.id
+  }
+
+  tags = {
+    Name = "vpc-rt"
+  }
+}
+
+resource "aws_route_table_association" "rt-assoc" {
+  subnet_id      = aws_subnet.sub.id
+  route_table_id = aws_route_table.rt.id
+}
+
 resource "aws_security_group" "sg" {
   vpc_id = aws_vpc.vpc.id
 

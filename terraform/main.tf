@@ -2,6 +2,8 @@ module "vpc" {
   source = "./modules/vpc"
   vpc_name = var.vpc_name
   subnet_name = var.subnet_name
+  igw_name = var.igw_name
+  rt_name = var.rt_name
   sg_name = var.sg_name
 }
 
