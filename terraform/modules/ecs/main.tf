@@ -26,6 +26,7 @@ resource "aws_ecs_task_definition" "task" {
   ])
 
   execution_role_arn = var.ecs_execution_role_arn
+  task_role_arn = var.ecs_execution_role_arn
 }
 
 resource "aws_ecs_service" "service" {
