@@ -6,6 +6,10 @@ variable "subnet_name" {
   
 }
 
+variable "sg_name" {
+  
+}
+
 variable "ecs_cluster_name" {
   
 }

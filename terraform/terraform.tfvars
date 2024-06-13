@@ -1,6 +1,7 @@
 #vpc
 vpc_name = "pt-vpc"
 subnet_name = "pt-sub"
+sg_name = "pt-sg"
 
 #ecs
 ecs_cluster_name = "tf-cluster"

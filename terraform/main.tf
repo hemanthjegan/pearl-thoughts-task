@@ -2,6 +2,7 @@ module "vpc" {
   source = "./modules/vpc"
   vpc_name = var.vpc_name
   subnet_name = var.subnet_name
+  sg_name = var.sg_name
 }
 
 module "ecs" {
