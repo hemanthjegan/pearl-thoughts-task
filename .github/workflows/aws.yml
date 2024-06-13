@@ -9,7 +9,7 @@ env:
   ECS_SERVICE: tf-service                  # Set to your ECS service name
   ECS_CLUSTER: tf-cluster                  # Set to your ECS cluster name
   CONTAINER_NAME: tf-container             # Set to the name of the container in the task definition
-  ECS_TASK_DEFINITION_FAMILY_NAME: tf-td
+  ECS_TASK_DEFINITION: tf-td
 
 permissions:
   contents: read
@@ -62,56 +62,11 @@ jobs:
         echo "Applying Terraform plan"
         terraform apply -auto-approve tfplan
 
-    - name: update task definition
-      run: |
-        echo '
-        {
-          "family": "${{ env.ECS_TASK_DEFINITION_FAMILY_NAME }}",
-          "networkMode": "awsvpc",
-          "executionRoleArn": "${{ env.EXECUTION_ROLE_ARN }}",
-          "containerDefinitions": [
-            {
-              "name": "${{ env.CONTAINER_NAME }}",
-              "image": "${{ steps.build-image.outputs.image }}",
-              "essential": true,
-              "portMappings": [
-                {
-                  "containerPort": 3000,
-                  "hostPort": 3000,
-                  "protocol": "tcp"
-                }
-              ],
-              "memory": 512,
-              "cpu": 256,
-              "environment": [
-                {
-                  "name": "NODE_ENV",
-                  "value": "production"
-                }
-              ],
-              "logConfiguration": {
-                "logDriver": "awslogs",
-                "options": {
-                  "awslogs-group": "/ecs/nodejs-app",
-                  "awslogs-region": "${{ env.AWS_REGION }}",
-                  "awslogs-stream-prefix": "ecs"
-                }
-              }
-            }
-          ],
-          "requiresCompatibilities": [
-            "FARGATE"
-          ],
-          "cpu": "256",
-          "memory": "512"
-        }
-        ' > task-definition.json
-
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: task-def
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
-        task-definition: task-definition.json
+        task-definition: ${{ env.ECS_TASK_DEFINITION }}
         container-name: ${{ env.CONTAINER_NAME }}
         image: ${{ steps.build-image.outputs.image }}
 
